@@ -34,7 +34,7 @@ searchForm.addEventListener('submit', async (event) => {
   loadMoreBtn.style.display = 'none';
 
   try {
-    showLoader();// Показати завантажувач перед запитом
+    showLoader(); // Показати завантажувач перед запитом
     const images = await searchImages(currentQuery, currentPage);
     totalHits = images.totalHits;
     renderImages(images.hits); // Відобразити зображення в галереї
@@ -42,18 +42,19 @@ searchForm.addEventListener('submit', async (event) => {
     if (images.hits.length > 0) {
       loadMoreBtn.style.display = 'block';
     }
-// Очистити input після успішного пошука та рендерінга зображень
+
+    // Очистити input після успішного пошука та рендерінга зображень
     searchInput.value = '';
     refreshLightbox(); // Оновити SimpleLightbox
-    } catch (error) {
-      console.error('Error searching images:', error);
-      iziToast.error({
-        title: 'Error',
-        message: 'Failed to fetch images. Please try again later.'
-      });
-} finally {
-      hideLoader(); // Приховати завантажувач після завершення запиту (незалежно від результату)
-    }
+  } catch (error) {
+    console.error('Error searching images:', error);
+    iziToast.error({
+      title: 'Error',
+      message: 'Failed to fetch images. Please try again later.'
+    });
+  } finally {
+    hideLoader(); // Приховати завантажувач після завершення запиту (незалежно від результату)
+  }
 });
 
 loadMoreBtn.addEventListener('click', async () => {
@@ -73,7 +74,7 @@ loadMoreBtn.addEventListener('click', async () => {
     }
 
     refreshLightbox();
-    smoothScroll();
+    smoothScroll(); // Виклик функції для плавного прокручування
   } catch (error) {
     console.error('Error loading more images:', error);
     iziToast.error({
@@ -87,14 +88,14 @@ loadMoreBtn.addEventListener('click', async () => {
 
 function showLoader() {
   loader.style.display = 'block';
-  gallery.innerHTML = ''; // Очистити галерею перед показом нових зображень
 }
 
 function hideLoader() {
   loader.style.display = 'none';
 }
+
 function smoothScroll() {
-  const { height: cardHeight } = gallery.firstElementChild.getBoundingClientRect();
+  const cardHeight = gallery.firstElementChild ? gallery.firstElementChild.getBoundingClientRect().height : 0;
   window.scrollBy({
     top: cardHeight * 2,
     behavior: 'smooth',
