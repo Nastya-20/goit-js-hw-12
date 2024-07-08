@@ -34,13 +34,27 @@ searchForm.addEventListener('submit', async (event) => {
   loadMoreBtn.style.display = 'none';
 
   try {
-    showLoader(); // Показати завантажувач перед запитом
+    showLoader();  // Показати завантажувач перед запитом
     const images = await searchImages(currentQuery, currentPage);
     totalHits = images.totalHits;
-    renderImages(images.hits); // Відобразити зображення в галереї
 
-    if (images.hits.length > 0) {
+    if (images.hits.length === 0) {
+      iziToast.error({
+        title: 'Error',
+        message: 'Sorry, there are no images matching your search query. Please try again!'
+      });
+      return;
+    }
+
+    renderImages(images.hits);  // Відобразити зображення в галереї
+
+    if (images.hits.length > 0 && currentPage * 15 < totalHits) {
       loadMoreBtn.style.display = 'block';
+    } else if (images.hits.length < 15) {
+      iziToast.info({
+        title: 'Info',
+        message: "We're sorry, but you've reached the end of search results."
+      });
     }
 
     // Очистити input після успішного пошука та рендерінга зображень
@@ -74,7 +88,7 @@ loadMoreBtn.addEventListener('click', async () => {
     }
 
     refreshLightbox();
-    smoothScroll(); // Виклик функції для плавного прокручування
+    smoothScroll();  // Виклик функції для плавного прокручування
   } catch (error) {
     console.error('Error loading more images:', error);
     iziToast.error({
