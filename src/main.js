@@ -10,13 +10,13 @@ const loader = document.querySelector('.loader');
 const gallery = document.getElementById('gallery');
 const loadMoreBtn = document.getElementById('loadMoreBtn');
 
-const PER_PAGE = 15; // Define a constant for the number of items per page
+const PER_PAGE = 15; // Визначаємо константу для кількості елементів на сторінці
 
 let currentPage = 1;
 let currentQuery = '';
 let totalHits = 0;
 
-// Initialize SimpleLightbox
+// Ініціалізація  SimpleLightbox
 initializeLightbox();
 
 searchForm.addEventListener('submit', async (event) => {
@@ -36,8 +36,8 @@ searchForm.addEventListener('submit', async (event) => {
   loadMoreBtn.style.display = 'none';
 
   try {
-    showLoader(); // Show loader before the request
-    const images = await searchImages(currentQuery, currentPage, PER_PAGE); // Pass PER_PAGE to the API request
+    showLoader(); // Показати завантажувач перед запитом
+    const images = await searchImages(currentQuery, currentPage, PER_PAGE); //Передаємо PER_PAGE запиту API
     totalHits = images.totalHits;
 
     if (images.hits.length === 0) {
@@ -48,7 +48,7 @@ searchForm.addEventListener('submit', async (event) => {
       return;
     }
 
-    renderImages(images.hits); // Render images in the gallery
+    renderImages(images.hits); // Рендеримо зображення в галереї
 
     if (images.hits.length > 0 && currentPage * PER_PAGE < totalHits) {
       loadMoreBtn.style.display = 'block';
@@ -59,9 +59,9 @@ searchForm.addEventListener('submit', async (event) => {
       });
     }
 
-    // Clear input after successful search and rendering of images
+    // Очистити введені дані після успішного пошуку та відтворення зображень
     searchInput.value = '';
-    refreshLightbox(); // Refresh SimpleLightbox
+    refreshLightbox(); // Оновити SimpleLightbox
   } catch (error) {
     console.error('Error searching images:', error);
     iziToast.error({
@@ -69,7 +69,7 @@ searchForm.addEventListener('submit', async (event) => {
       message: 'Failed to fetch images. Please try again later.'
     });
   } finally {
-    hideLoader(); // Hide loader after the request completes (regardless of the outcome)
+    hideLoader(); // Приховати завантажувач після завершення запиту (незалежно від результату)
   }
 });
 
@@ -90,7 +90,7 @@ loadMoreBtn.addEventListener('click', async () => {
     }
 
     refreshLightbox();
-    smoothScroll(); // Call function for smooth scrolling
+    smoothScroll(); // Функція виклику для плавної прокрутки
   } catch (error) {
     console.error('Error loading more images:', error);
     iziToast.error({
